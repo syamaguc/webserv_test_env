@@ -28,7 +28,6 @@ testcases_post = {
     "empty query string value POST test": [f"POST '/cgi-bin/test_post.py?name=' HTTP/1.1\r\n\r\nThis is POST test", f"POST '/cgi/test_post.py?name=' HTTP/1.1\r\n\r\nThis is POST test"],
     "empty query string POST test": [f"POST '/cgi-bin/test_post.py' HTTP/1.1\r\n\r\nThis is POST test", f"POST '/cgi/test_post.py' HTTP/1.1\r\n\r\nThis is POST test"],
     "long query": [f"POST '/cgi-bin/test_post.py?{'hoge' * 1000}={'fuga' * 1000}' HTTP/1.1\r\n\r\nThis is POST test", f"POST '/cgi/test_post.py?{'hoge' * 1000}={'fuga' * 1000}' HTTP/1.1\r\n\r\nThis is POST test"],
-    # "super long query": [f"POST '/cgi-bin/test_post.py?{'hoge' * 1000000}={'fuga' * 1000000}' HTTP/1.1\r\n\r\nThis is POST test", f"POST '/cgi/test_post.py?{'hoge' * 1000000}={'fuga' * 1000000}' HTTP/1.1\r\n\r\nThis is POST test"],
 }
 
 

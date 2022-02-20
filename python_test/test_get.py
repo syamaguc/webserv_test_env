@@ -26,12 +26,9 @@ def testcase(description, request_header):
 testcases_get = {
     "normal GET test": f"GET / HTTP/1.1\r\nHost:default_server\r\n\r\n{config.SERVER_ADDR}",
     "invalid uri": f"GET /hogehoge/fugafuga HTTP/1.1\r\nHost:default_server\r\n\r\n{config.SERVER_ADDR}",
-    # "multiple host": f"GET / HTTP/1.1\r\nHost:hoge\r\nHost:fuga\r\n\r\n{config.SERVER_ADDR}",
     "invalid host": f"GET / HTTP/1.1\r\nHost:hogehoge_server\r\n\r\n{config.SERVER_ADDR}",
-    # "normal content length (100)": f"GET / HTTP/1.1\r\nContent-Length: 10000\r\n\r\n{config.SERVER_ADDR}",
     "invalid content length (-1)": f"GET / HTTP/1.1\r\nContent-Length: -1\r\n\r\n{config.SERVER_ADDR}",
     "invalid content length (not digit)": f"GET / HTTP/1.1\r\nContent-Length: hogehoge\r\n\r\n{config.SERVER_ADDR}",
-    # "long content length (100000000000)": f"GET / HTTP/1.1\r\nContent-Length: 100000000000\r\n\r\n{config.SERVER_ADDR}",
     "content length with Transfer-Encoding": f"GET / HTTP/1.1\r\nContent-Length: 10000\r\nTransfer-Encoding: chunked\r\n\r\n{config.SERVER_ADDR}",
     "multiple content length": f"GET / HTTP/1.1\r\nContent-Length: 10\r\nContent-Length: 100\r\n\r\n{config.SERVER_ADDR}",
     "space between Host name": f"GET / HTTP/1.1\r\nHost : default_server\r\n\r\n{config.SERVER_ADDR}",
