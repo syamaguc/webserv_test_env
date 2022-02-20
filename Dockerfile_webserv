@@ -1,0 +1,21 @@
+FROM ubuntu:latest
+
+ENV TZ=Asia/Tokyo
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+RUN apt-get update -y && apt-get upgrade -y && \
+	apt-get install vim \
+	python3.8 \
+	make \
+	gcc \
+	clang \
+	siege \
+	curl \
+	-y
+
+COPY ./webserv /tmp/webserv
+COPY ./script/webserv.sh /webserv.sh
+
+RUN chmod +x /webserv.sh && chmod 755 -R /tmp/webserv/test/cgi-bin && chmod 755 -R /tmp/webserv/python
+
+ENTRYPOINT ["/bin/bash", "/webserv.sh"]

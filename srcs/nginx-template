@@ -1,0 +1,46 @@
+# 49513～65535 is free port
+server {
+	listen 50000;
+	root /var/www/html;
+	error_page 404 /var/www/html/error404.html;
+	index default_server.html;
+	server_name default_server;
+	
+	location / {
+		try_files $uri $uri/ =404;
+		autoindex %AUTO_INDEX%;
+	}
+    location /upload/ {
+        root /var/www/;
+        client_body_temp_path /var/www/temp_data;
+        dav_methods PUT DELETE;
+        create_full_put_path on;
+        dav_access group:rw all:rw;
+    }
+}
+
+server {
+	listen 50000;
+	root /var/www/html;
+	error_page 404 /var/www/html/error404.html;
+	index virtual_server.html;
+	server_name virtual_server;
+	
+	location / {
+		limit_except GET POST DELETE { deny	all; }
+		try_files $uri $uri/ =404;
+		autoindex %AUTO_INDEX%;
+	}
+    
+}
+
+server {
+        listen 50001;
+        root /var/www/html;
+        index cgi_server.html;
+        server_name cgi_server;
+        location / {
+                try_files $uri $uri/ =404;
+        }
+include fcgiwrap.conf;
+}

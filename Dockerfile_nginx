@@ -1,0 +1,46 @@
+FROM debian:buster
+
+# Variables（only Dockerfile）
+ARG HTTP_DIR=/var/www/html
+
+# Environment variables 
+# Possible values: 'on' or 'off'
+ENV NGINX_AUTO_INDEX="on"
+ENV NGINX_DIR=/etc/nginx
+ENV NGINX_SITES_DIR=$NGINX_DIR/sites-enabled
+
+# install necessary packages
+# ca-certificates: need ssl to use wget
+RUN apt-get -y update && apt-get -y upgrade ; \
+	apt-get install -y --no-install-recommends \
+	python3 \
+	fcgiwrap \
+	curl \
+	vim \
+	lsof \
+	siege \
+	nginx-full
+
+# Using working directory
+# https://docs.docker.com/engine/reference/builder/#workdir
+WORKDIR /var/www/html
+
+# Removing unwanted data
+RUN rm -f $NGINX_SITES_DIR/default ; \
+	rm -rf * ;
+
+# niginx setting
+COPY ./srcs/nginx-template $NGINX_SITES_DIR/default
+# cgi setting
+COPY ./srcs/cgi-bin /usr/lib/cgi-bin
+## Copy test html files
+COPY ./srcs/www/ /var/www/
+## Copy entrypoint
+COPY ./script/entrypoint.sh /entrypoint.sh
+
+# enable fcgiwrap config of nginx
+RUN cp /usr/share/doc/fcgiwrap/examples/nginx.conf /etc/nginx/fcgiwrap.conf && chmod 755 /usr/lib/cgi-bin/* && chmod 777 -R /var/www && chmod 755 /entrypoint.sh
+
+# Difference between "CMD" and "ENTRYPOINT" ===> It is complicated
+# When starting container, starting mysql, php proxy and nginx
+ENTRYPOINT ["/bin/bash", "/entrypoint.sh" ]
